@@ -1,0 +1,170 @@
+:root {
+  --bg: #f3f7ff;
+  --bg-2: #e8efff;
+  --surface: rgba(255, 255, 255, 0.72);
+  --surface-2: rgba(255, 255, 255, 0.85);
+  --text: #1d2945;
+  --muted: #5f6f95;
+  --border: rgba(101, 128, 196, 0.25);
+  --primary: #5e84ff;
+  --primary-2: #5ed7c0;
+}
+
+body.dark {
+  --bg: #060a17;
+  --bg-2: #0d1630;
+  --surface: rgba(20, 31, 58, 0.62);
+  --surface-2: rgba(16, 26, 49, 0.78);
+  --text: #edf2ff;
+  --muted: #9fb0da;
+  --border: rgba(165, 190, 255, 0.22);
+  --primary: #8ab3ff;
+  --primary-2: #68f0d4;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(102, 136, 255, 0.22), transparent 35%),
+    radial-gradient(circle at 90% 0%, rgba(86, 214, 196, 0.2), transparent 30%),
+    linear-gradient(180deg, var(--bg), var(--bg-2));
+  color: var(--text);
+}
+.container {
+  max-width: 900px;
+  margin: 16px auto;
+  padding: 0 14px 18px;
+  display: grid;
+  gap: 10px;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 10px 24px rgba(76, 103, 168, 0.16);
+}
+.card-hero {
+  background:
+    linear-gradient(140deg, rgba(124, 151, 248, 0.26), rgba(214, 240, 255, 0.75)),
+    var(--surface);
+}
+h1, h2 { margin: 0 0 6px; font-weight: 600; letter-spacing: 0.1px; }
+h1 { font-size: 1.18rem; }
+h2 { font-size: 0.98rem; }
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.title-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pill {
+  font-size: 0.74rem;
+  color: #2d4478;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(112, 146, 230, 0.34);
+  background: rgba(172, 198, 255, 0.3);
+}
+.icon { margin-right: 6px; }
+.field-title { color: #3f578f; }
+body.dark .field-title { color: #c4d3fb; }
+.muted { color: var(--muted); margin: 4px 0 0; font-size: 0.86rem; }
+.grid { display: grid; gap: 8px; margin: 7px 0; }
+.grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+label { display: grid; gap: 4px; font-size: 0.84rem; color: var(--muted); }
+input {
+  width: 100%;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 9px;
+  outline: none;
+}
+input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(94, 132, 255, 0.16);
+}
+button {
+  border: 0;
+  border-radius: 10px;
+  padding: 8px 11px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.84rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+button:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+  color: #ffffff;
+}
+.btn-soft {
+  background: rgba(255, 255, 255, 0.68);
+  color: #2b4478;
+  border: 1px solid rgba(111, 138, 206, 0.3);
+}
+.btn-soft:hover {
+  filter: brightness(1.02);
+}
+body.dark .btn-soft {
+  background: rgba(30, 43, 74, 0.75);
+  color: #d8e5ff;
+  border-color: rgba(148, 174, 241, 0.25);
+}
+.row-end { display: flex; align-items: end; }
+.table-wrap { overflow-x: auto; }
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 6px;
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+th, td { border-bottom: 1px solid rgba(132, 157, 220, 0.18); padding: 7px; text-align: left; }
+th {
+  color: #4a629a;
+  font-weight: 500;
+  background: rgba(114, 150, 255, 0.14);
+}
+tbody tr:hover { background: rgba(123, 161, 255, 0.12); }
+.actions { display: flex; gap: 6px; }
+.actions button { padding: 5px 8px; font-size: 0.76rem; }
+pre {
+  margin: 0;
+  min-height: 94px;
+  max-height: 240px;
+  overflow: auto;
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+@media (max-width: 760px) {
+  .grid.two, .grid.three { grid-template-columns: 1fr; }
+  .title-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

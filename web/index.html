@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Management</title>
+    <link rel="stylesheet" href="/app.css" />
+  </head>
+  <body>
+    <main class="container">
+      <section class="card card-hero">
+        <div class="title-row">
+          <h1><span class="icon">🧊</span> User Management</h1>
+          <div class="title-tools">
+            <span class="pill">Compact UI</span>
+            <button id="themeBtn" class="btn-soft" type="button">🌙 Dark</button>
+          </div>
+        </div>
+        <p class="muted">Clean glass dashboard for sign in and user operations.</p>
+
+        <div class="grid two">
+          <label><span class="field-title">📧 Email</span><input id="email" type="email" value="alice@example.com" /></label>
+          <label><span class="field-title">🔒 Password</span><input id="password" type="password" value="Password123" /></label>
+        </div>
+        <button id="signInBtn" class="btn-primary">🔑 Sign In</button>
+        <p id="tokenState" class="muted"></p>
+      </section>
+
+      <section class="card">
+        <h2><span class="icon">👥</span> Users</h2>
+        <div class="grid two">
+          <label><span class="field-title">🔎 Search Email</span><input id="searchEmail" type="text" placeholder="alice" /></label>
+          <div class="row-end"><button id="listBtn" class="btn-soft">📋 List Users</button></div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="usersBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2><span class="icon">🪪</span> Selected User</h2>
+        <div class="grid three">
+          <label><span class="field-title"># User ID</span><input id="userId" type="number" min="1" /></label>
+          <label><span class="field-title">✏️ Name</span><input id="userName" type="text" /></label>
+          <div class="row-end"><button id="updateBtn" class="btn-primary">💾 Update User</button></div>
+        </div>
+        <button id="getBtn" class="btn-soft">🧭 Get User</button>
+      </section>
+
+      <section class="card">
+        <h2><span class="icon">🧾</span> Response</h2>
+        <pre id="output"></pre>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

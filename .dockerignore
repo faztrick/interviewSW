@@ -1,0 +1,6 @@
+.git
+.gitignore
+interviewSW.code-workspace
+*.log
+tmp
+bin
