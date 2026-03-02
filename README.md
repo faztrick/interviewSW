@@ -1,112 +1,108 @@
-# User Management API (Golang)
+# User Management API (Go)
 
-Backend web application with JWT-based authentication and user management APIs.
+A small backend application with JWT authentication, user management endpoints, and a simple web dashboard.
 
 ## Features
 
-- Sign in with email and password
-- Get user by ID
-- Update user
-- List users with optional email search
-- Modern compact web UI dashboard
-- JWT-protected user endpoints
-- Input validation and meaningful JSON error responses
+- JWT sign-in with email/password
+- Protected user endpoints (`GET /users`, `GET /users/{id}`, `PUT /users/{id}`)
+- Optional PostgreSQL persistence (falls back to in-memory store)
+- Input validation with JSON error responses
+- Compact web UI served from `/`
 
-## Run
+## Requirements
+
+- Go 1.24+
+- Docker + Docker Compose (optional, for containerized run)
+
+## Quick Start (Local)
 
 ```bash
 go run ./cmd/server
 ```
 
-Then open:
+Open:
 
-- `http://localhost:8080/` (web UI)
+- http://localhost:8080/ (web UI)
+- http://localhost:8080/health
 
-## Run with Docker (recommended)
+## Quick Start (Docker)
 
 ```bash
 docker compose up --build -d
 ```
 
-Then open:
+Open:
 
-- `http://localhost:8081/`
+- http://localhost:8081/ (web UI)
+- http://localhost:8081/health
 
-Stop stack:
+Stop:
 
 ```bash
 docker compose down
 ```
 
-Stop and remove DB volume:
+Stop and remove Postgres volume:
 
 ```bash
 docker compose down -v
 ```
+
+## Configuration
 
 Environment variables:
 
 - `PORT` (default: `8080`)
 - `JWT_SECRET` (default: `development-secret`)
 - `JWT_ISSUER` (default: `interviewsw`)
-- `DATABASE_URL` (optional, enables PostgreSQL persistence)
+- `DATABASE_URL` (optional; when set, PostgreSQL store is used)
 
-## PostgreSQL (optional)
-
-If `DATABASE_URL` is set, the app uses PostgreSQL; otherwise it runs with in-memory storage.
-
-Example:
+Example PostgreSQL run without Docker app container:
 
 ```bash
 export DATABASE_URL="postgres://postgres:postgres@localhost:5432/interviewsw?sslmode=disable"
 go run ./cmd/server
 ```
 
-On startup, schema is created automatically and seed users are inserted only when the `users` table is empty.
+Notes:
+
+- If `DATABASE_URL` is not set, the app uses in-memory storage.
+- On PostgreSQL startup, schema is ensured and seed data is inserted only when `users` is empty.
+
+## Seed Users
+
+- `alice@example.com` / `Password123`
+- `bob@example.com` / `Password123`
 
 ## API
 
-## Public testing
-
-The following endpoints are public and do not require a JWT token:
+### Public Endpoints
 
 - `GET /health`
 - `POST /auth/sign-in`
 
-Quick test (local run on `:8080`):
+### Authenticated Endpoints
+
+All `/users*` endpoints require:
+
+- Header: `Authorization: Bearer <jwt>`
+
+Endpoints:
+
+- `GET /users` (optional query: `email`)
+- `GET /users/{id}`
+- `PUT /users/{id}`
+
+### Example: Sign In
 
 ```bash
-curl http://localhost:8080/health
-
 curl -X POST http://localhost:8080/auth/sign-in \
   -H "Content-Type: application/json" \
   -d '{"email":"alice@example.com","password":"Password123"}'
 ```
 
-Quick test (docker run on `:8081`):
-
-```bash
-curl http://localhost:8081/health
-
-curl -X POST http://localhost:8081/auth/sign-in \
-  -H "Content-Type: application/json" \
-  -d '{"email":"alice@example.com","password":"Password123"}'
-```
-
-### 1) Sign In
-
-- `POST /auth/sign-in`
-
-Request body:
-
-```json
-{
-  "email": "alice@example.com",
-  "password": "Password123"
-}
-```
-
-Success response:
+Response:
 
 ```json
 {
@@ -114,48 +110,79 @@ Success response:
 }
 ```
 
-### 2) Get User
-
-- `GET /users/{id}`
-- Header: `Authorization: Bearer <jwt>`
-
-### 3) Update User
-
-- `PUT /users/{id}`
-- Header: `Authorization: Bearer <jwt>`
-
-Request body:
-
-```json
-{
-  "name": "Alice Cooper"
-}
-```
-
-### 4) List Users
-
-- `GET /users`
-- Optional query: `email`
-- Header: `Authorization: Bearer <jwt>`
-
-Example:
+### Example: List Users
 
 ```bash
-curl -H "Authorization: Bearer <jwt>" "http://localhost:8080/users?email=alice"   # local run
-curl -H "Authorization: Bearer <jwt>" "http://localhost:8081/users?email=alice"   # docker run
+curl -H "Authorization: Bearer <jwt>" \
+  "http://localhost:8080/users?email=alice"
+```
+
+### Example: Get User
+
+```bash
+curl -H "Authorization: Bearer <jwt>" \
+  http://localhost:8080/users/1
+```
+
+### Example: Update User
+
+```bash
+curl -X PUT http://localhost:8080/users/1 \
+  -H "Authorization: Bearer <jwt>" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Alice Cooper"}'
 ```
 
 ## Web UI
 
-The UI provides:
+The UI supports:
 
-- Sign in and token session state
-- Search + list users
-- Load/get a user by ID
-- Update user name
-- JSON response panel for quick debugging
+- Sign in and token session handling
+- List/search users by email
+- Load a user by ID
+- Update a user's name
+- Inspect JSON responses
 
-## Seeded users
+## Run Tests
 
-- `alice@example.com` / `Password123`
-- `bob@example.com` / `Password123`
+```bash
+go test ./...
+```
+
+## Troubleshooting
+
+### Port already in use
+
+- Local run fails on `:8080`: set a different port, for example:
+
+```bash
+PORT=8090 go run ./cmd/server
+```
+
+- Docker run fails on `:8081`: change host mapping in `docker-compose.yml` from `8081:8080` to another free host port.
+
+### PostgreSQL connection issues
+
+- For local app + local DB, verify `DATABASE_URL` points to a reachable database.
+- If running with Docker Compose, start services with:
+
+```bash
+docker compose up --build -d
+```
+
+- Check container status/logs:
+
+```bash
+docker compose ps
+docker compose logs app postgres
+```
+
+### Unauthorized on protected endpoints
+
+- Call `POST /auth/sign-in` first and pass the returned token as:
+
+```bash
+Authorization: Bearer <jwt>
+```
+
+- Ensure there are no extra spaces or missing `Bearer` prefix.
